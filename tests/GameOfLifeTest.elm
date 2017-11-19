@@ -106,79 +106,46 @@ updateCellTest =
     describe "updateCell should apply game rules to a given cell"
         [ test "isolated cell dies" <|
             \_ ->
-                let
-                    newModel =
-                        updateCell defaultModel ( 1, 1 )
-                in
-                    isDead newModel ( 1, 1 )
-                        |> Expect.true "Cell should be detected as dead"
+                expectCellToBeDeadAfterUpdate defaultModel
         , test "cell with only one neighbor dies" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 1, 1 ), ( 1, 2 ), ( 4, 4 ) ]
-
-                    newModel =
-                        updateCell startModel ( 1, 1 )
-                in
-                    isDead newModel ( 1, 1 )
-                        |> Expect.true "Cell should have died"
+                expectCellToBeDeadAfterUpdate [ ( 1, 1 ), ( 1, 2 ), ( 4, 4 ) ]
         , test "cell with 2 neighbors survives" <|
             \_ ->
-                let
-                    startCellsModel =
-                        [ ( 1, 0 ), ( 1, 1 ), ( 1, 2 ) ]
-
-                    newModel =
-                        updateCell startCellsModel ( 1, 1 )
-                in
-                    isAlive newModel ( 1, 1 )
-                        |> Expect.true "Cell should have survived"
+                expectCellToBeAliveAfterUpdate [ ( 1, 0 ), ( 1, 1 ), ( 1, 2 ) ]
         , test "cell with 3 neighbors survives" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ) ]
-
-                    newModel =
-                        updateCell startModel ( 1, 1 )
-                in
-                    isAlive newModel ( 1, 1 )
-                        |> Expect.true "Cell should have survived"
+                expectCellToBeAliveAfterUpdate [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ) ]
         , test "cell with 4 neighbors dies" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ) ]
-
-                    newModel =
-                        updateCell startModel ( 1, 1 )
-                in
-                    isDead newModel ( 1, 1 )
-                        |> Expect.true "Cell should have died"
+                expectCellToBeDeadAfterUpdate [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ) ]
         , test "cell with 5 neighbors dies" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 1, 0 ), ( 2, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ), ( 4, 4 ) ]
-
-                    newModel =
-                        updateCell startModel ( 1, 1 )
-                in
-                    isDead newModel ( 1, 1 )
-                        |> Expect.true "Cell should have died"
+                expectCellToBeDeadAfterUpdate [ ( 1, 0 ), ( 2, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ), ( 4, 4 ) ]
         , test "cell spans when it has 3 neighbors" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 1, 0 ), ( 0, 1 ), ( 1, 2 ) ]
-
-                    newModel =
-                        updateCell startModel ( 1, 1 )
-                in
-                    isAlive newModel ( 1, 1 )
-                        |> Expect.true "Cell should have spawned"
+                expectCellToBeAliveAfterUpdate [ ( 1, 0 ), ( 0, 1 ), ( 1, 2 ) ]
         ]
+
+
+expectCellToBeAliveAfterUpdate : Model -> Expect.Expectation
+expectCellToBeAliveAfterUpdate startModel =
+    let
+        newModel =
+            updateCell startModel ( 1, 1 )
+    in
+        isAlive newModel ( 1, 1 )
+            |> Expect.true "Cell should be alive"
+
+
+expectCellToBeDeadAfterUpdate : Model -> Expect.Expectation
+expectCellToBeDeadAfterUpdate startModel =
+    let
+        newModel =
+            updateCell startModel ( 1, 1 )
+    in
+        isDead newModel ( 1, 1 )
+            |> Expect.true "Cell should be dead"
 
 
 updateTest : Test
@@ -186,52 +153,27 @@ updateTest =
     describe "update should apply game rules to all cells in the game"
         [ test "isolated cell dies" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 0, 0 ), ( 0, 2 ), ( 2, 0 ), ( 2, 2 ) ]
-
-                    newModel =
-                        update startModel
-                in
-                    List.all (isDead newModel) startModel
-                        |> Expect.true "All cells should be dead"
+                expectTranformTo [ ( 0, 0 ), ( 0, 2 ), ( 2, 0 ), ( 2, 2 ) ]
+                    []
         , test "three cells create a new one" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 0, 0 ), ( 1, 0 ), ( 0, 1 ) ]
-
-                    newModel =
-                        update startModel
-
-                    expected =
-                        [ ( 0, 0 ), ( 0, 1 ), ( 1, 0 ), ( 1, 1 ) ]
-                in
-                    Expect.equal newModel expected
+                expectTranformTo [ ( 0, 0 ), ( 1, 0 ), ( 0, 1 ) ]
+                    [ ( 0, 0 ), ( 0, 1 ), ( 1, 0 ), ( 1, 1 ) ]
         , test "three neighbors remain unchanged" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
-
-                    newModel =
-                        update startModel
-
-                    expected =
-                        [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
-                in
-                    Expect.equal newModel expected
+                expectTranformTo [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
+                    [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
         , test "overpopulation leads to death" <|
             \_ ->
-                let
-                    startModel =
-                        [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
-
-                    newModel =
-                        update startModel
-
-                    expected =
-                        [ ( 4, 5 ), ( 4, 6 ), ( 4, 7 ), ( 5, 5 ), ( 5, 7 ), ( 6, 5 ), ( 6, 6 ), ( 6, 7 ) ]
-                in
-                    Expect.equal newModel expected
+                expectTranformTo [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
+                    [ ( 4, 5 ), ( 4, 6 ), ( 4, 7 ), ( 5, 5 ), ( 5, 7 ), ( 6, 5 ), ( 6, 6 ), ( 6, 7 ) ]
         ]
+
+
+expectTranformTo : Model -> Model -> Expect.Expectation
+expectTranformTo startModel expectedModel =
+    let
+        newModel =
+            update startModel
+    in
+        Expect.equal newModel expectedModel
