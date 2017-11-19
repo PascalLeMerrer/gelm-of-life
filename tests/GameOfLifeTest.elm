@@ -213,4 +213,30 @@ updateTest =
                         [ ( 0, 0 ), ( 0, 1 ), ( 1, 0 ), ( 1, 1 ) ]
                 in
                     Expect.equal newModel.livingCells expected
+        , test "three neighbors remain unchanged" <|
+            \_ ->
+                let
+                    startModel =
+                        init 10 10 [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
+
+                    newModel =
+                        update startModel
+
+                    expected =
+                        [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
+                in
+                    Expect.equal newModel.livingCells expected
+        , test "overpopulation leads to death" <|
+            \_ ->
+                let
+                    startModel =
+                        init 10 10 [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
+
+                    newModel =
+                        update startModel
+
+                    expected =
+                        [ ( 4, 5 ), ( 4, 6 ), ( 4, 7 ), ( 5, 5 ), ( 5, 7 ), ( 6, 5 ), ( 6, 6 ), ( 6, 7 ) ]
+                in
+                    Expect.equal newModel.livingCells expected
         ]
