@@ -9435,20 +9435,48 @@ var _user$project$GameOfLife$updateGame = function (model) {
 };
 var _user$project$GameOfLife$defaultPattern = {
 	ctor: '::',
-	_0: {ctor: '_Tuple2', _0: 24, _1: 26},
+	_0: {ctor: '_Tuple2', _0: 23, _1: 23},
 	_1: {
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 25, _1: 25},
+		_0: {ctor: '_Tuple2', _0: 23, _1: 24},
 		_1: {
 			ctor: '::',
-			_0: {ctor: '_Tuple2', _0: 25, _1: 26},
+			_0: {ctor: '_Tuple2', _0: 23, _1: 25},
 			_1: {
 				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: 25, _1: 27},
+				_0: {ctor: '_Tuple2', _0: 23, _1: 26},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 26, _1: 26},
-					_1: {ctor: '[]'}
+					_0: {ctor: '_Tuple2', _0: 23, _1: 27},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 25, _1: 23},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 25, _1: 27},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 27, _1: 23},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 27, _1: 24},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 27, _1: 25},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 27, _1: 26},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 27, _1: 27},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -9457,36 +9485,28 @@ var _user$project$GameOfLife$defaultPattern = {
 var _user$project$GameOfLife$patterns = _elm_lang$core$Dict$fromList(
 	{
 		ctor: '::',
-		_0: {ctor: '_Tuple2', _0: 'small cross', _1: _user$project$GameOfLife$defaultPattern},
+		_0: {ctor: '_Tuple2', _0: 'exploder', _1: _user$project$GameOfLife$defaultPattern},
 		_1: {
 			ctor: '::',
 			_0: {
 				ctor: '_Tuple2',
-				_0: 'small exploder',
+				_0: 'small cross',
 				_1: {
 					ctor: '::',
 					_0: {ctor: '_Tuple2', _0: 24, _1: 26},
 					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 24, _1: 27},
+						_0: {ctor: '_Tuple2', _0: 25, _1: 25},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 25, _1: 25},
+							_0: {ctor: '_Tuple2', _0: 25, _1: 26},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 25, _1: 26},
+								_0: {ctor: '_Tuple2', _0: 25, _1: 27},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 25, _1: 28},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 26, _1: 26},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 26, _1: 27},
-											_1: {ctor: '[]'}
-										}
-									}
+									_0: {ctor: '_Tuple2', _0: 26, _1: 26},
+									_1: {ctor: '[]'}
 								}
 							}
 						}
@@ -9497,49 +9517,29 @@ var _user$project$GameOfLife$patterns = _elm_lang$core$Dict$fromList(
 				ctor: '::',
 				_0: {
 					ctor: '_Tuple2',
-					_0: 'exploder',
+					_0: 'small exploder',
 					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 23, _1: 23},
+						_0: {ctor: '_Tuple2', _0: 24, _1: 26},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 23, _1: 24},
+							_0: {ctor: '_Tuple2', _0: 24, _1: 27},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 23, _1: 25},
+								_0: {ctor: '_Tuple2', _0: 25, _1: 25},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 23, _1: 26},
+									_0: {ctor: '_Tuple2', _0: 25, _1: 26},
 									_1: {
 										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 23, _1: 27},
+										_0: {ctor: '_Tuple2', _0: 25, _1: 28},
 										_1: {
 											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: 25, _1: 23},
+											_0: {ctor: '_Tuple2', _0: 26, _1: 26},
 											_1: {
 												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 25, _1: 27},
-												_1: {
-													ctor: '::',
-													_0: {ctor: '_Tuple2', _0: 27, _1: 23},
-													_1: {
-														ctor: '::',
-														_0: {ctor: '_Tuple2', _0: 27, _1: 24},
-														_1: {
-															ctor: '::',
-															_0: {ctor: '_Tuple2', _0: 27, _1: 25},
-															_1: {
-																ctor: '::',
-																_0: {ctor: '_Tuple2', _0: 27, _1: 26},
-																_1: {
-																	ctor: '::',
-																	_0: {ctor: '_Tuple2', _0: 27, _1: 27},
-																	_1: {ctor: '[]'}
-																}
-															}
-														}
-													}
-												}
+												_0: {ctor: '_Tuple2', _0: 26, _1: 27},
+												_1: {ctor: '[]'}
 											}
 										}
 									}
@@ -9604,10 +9604,7 @@ var _user$project$GameOfLife$patterns = _elm_lang$core$Dict$fromList(
 			}
 		}
 	});
-var _user$project$GameOfLife$initialModel = A2(
-	_elm_lang$core$Maybe$withDefault,
-	{ctor: '[]'},
-	A2(_elm_lang$core$Dict$get, 'small cross', _user$project$GameOfLife$patterns));
+var _user$project$GameOfLife$initialModel = _user$project$GameOfLife$defaultPattern;
 var _user$project$GameOfLife$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -9634,7 +9631,6 @@ var _user$project$GameOfLife$subscriptions = function (model) {
 var _user$project$GameOfLife$SelectPattern = function (a) {
 	return {ctor: 'SelectPattern', _0: a};
 };
-var _user$project$GameOfLife$Next = {ctor: 'Next'};
 var _user$project$GameOfLife$viewControls = function () {
 	var patternNames = _elm_lang$core$Dict$keys(_user$project$GameOfLife$patterns);
 	return A2(
@@ -9642,23 +9638,8 @@ var _user$project$GameOfLife$viewControls = function () {
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_user$project$GameOfLife$Next),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('Next step'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(_lgastako$elm_select$Select$from, patternNames, _user$project$GameOfLife$SelectPattern),
-				_1: {ctor: '[]'}
-			}
+			_0: A2(_lgastako$elm_select$Select$from, patternNames, _user$project$GameOfLife$SelectPattern),
+			_1: {ctor: '[]'}
 		});
 }();
 var _user$project$GameOfLife$view = function (model) {

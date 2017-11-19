@@ -20,23 +20,20 @@ type alias Model =
 
 
 type Msg
-    = Next
-    | SelectPattern String
+    = SelectPattern String
     | Tick Time
 
 
 defaultPattern =
-    [ ( 24, 26 ), ( 25, 25 ), ( 25, 26 ), ( 25, 27 ), ( 26, 26 ) ]
+    [ ( 23, 23 ), ( 23, 24 ), ( 23, 25 ), ( 23, 26 ), ( 23, 27 ), ( 25, 23 ), ( 25, 27 ), ( 27, 23 ), ( 27, 24 ), ( 27, 25 ), ( 27, 26 ), ( 27, 27 ) ]
 
 
 patterns : Dict String Model
 patterns =
     Dict.fromList
-        [ ( "small cross", defaultPattern )
+        [ ( "exploder", defaultPattern )
+        , ( "small cross", [ ( 24, 26 ), ( 25, 25 ), ( 25, 26 ), ( 25, 27 ), ( 26, 26 ) ] )
         , ( "small exploder", [ ( 24, 26 ), ( 24, 27 ), ( 25, 25 ), ( 25, 26 ), ( 25, 28 ), ( 26, 26 ), ( 26, 27 ) ] )
-        , ( "exploder"
-          , [ ( 23, 23 ), ( 23, 24 ), ( 23, 25 ), ( 23, 26 ), ( 23, 27 ), ( 25, 23 ), ( 25, 27 ), ( 27, 23 ), ( 27, 24 ), ( 27, 25 ), ( 27, 26 ), ( 27, 27 ) ]
-          )
         , ( "ten cells line", [ ( 20, 25 ), ( 21, 25 ), ( 21, 25 ), ( 22, 25 ), ( 23, 25 ), ( 24, 25 ), ( 25, 25 ), ( 26, 25 ), ( 27, 25 ), ( 28, 25 ), ( 29, 25 ) ] )
         ]
 
@@ -48,7 +45,7 @@ subscriptions model =
 
 initialModel : Model
 initialModel =
-    Maybe.withDefault [] <| Dict.get "small cross" patterns
+    defaultPattern
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -161,9 +158,7 @@ viewControls =
             Dict.keys patterns
     in
         div []
-            [ button [ onClick Next ] [ Html.text "Next step" ]
-            , Select.from patternNames SelectPattern
-            ]
+            [ Select.from patternNames SelectPattern ]
 
 
 viewPatternOption : String -> Html Msg
