@@ -2,16 +2,11 @@ module GameOfLifeTest exposing (..)
 
 import Test exposing (..)
 import Expect
-
-
--- import Fuzz exposing (list, int, string)
-
-import ElmTestBDDStyle exposing (..)
 import GameOfLife exposing (..)
 
 
 defaultModel =
-    init 3 3 [ ( 1, 1 ) ]
+    [ ( 1, 1 ) ]
 
 
 deadCells =
@@ -121,7 +116,7 @@ updateCellTest =
             \_ ->
                 let
                     startModel =
-                        init 4 4 [ ( 1, 1 ), ( 1, 2 ), ( 4, 4 ) ]
+                        [ ( 1, 1 ), ( 1, 2 ), ( 4, 4 ) ]
 
                     newModel =
                         updateCell startModel ( 1, 1 )
@@ -132,7 +127,7 @@ updateCellTest =
             \_ ->
                 let
                     startCellsModel =
-                        init 3 3 [ ( 1, 0 ), ( 1, 1 ), ( 1, 2 ) ]
+                        [ ( 1, 0 ), ( 1, 1 ), ( 1, 2 ) ]
 
                     newModel =
                         updateCell startCellsModel ( 1, 1 )
@@ -143,7 +138,7 @@ updateCellTest =
             \_ ->
                 let
                     startModel =
-                        init 5 5 [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ) ]
+                        [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ) ]
 
                     newModel =
                         updateCell startModel ( 1, 1 )
@@ -154,7 +149,7 @@ updateCellTest =
             \_ ->
                 let
                     startModel =
-                        init 5 5 [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ) ]
+                        [ ( 1, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ) ]
 
                     newModel =
                         updateCell startModel ( 1, 1 )
@@ -165,7 +160,7 @@ updateCellTest =
             \_ ->
                 let
                     startModel =
-                        init 5 5 [ ( 1, 0 ), ( 2, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ), ( 4, 4 ) ]
+                        [ ( 1, 0 ), ( 2, 0 ), ( 0, 1 ), ( 1, 1 ), ( 1, 2 ), ( 2, 1 ), ( 4, 4 ) ]
 
                     newModel =
                         updateCell startModel ( 1, 1 )
@@ -176,7 +171,7 @@ updateCellTest =
             \_ ->
                 let
                     startModel =
-                        init 5 5 [ ( 1, 0 ), ( 0, 1 ), ( 1, 2 ) ]
+                        [ ( 1, 0 ), ( 0, 1 ), ( 1, 2 ) ]
 
                     newModel =
                         updateCell startModel ( 1, 1 )
@@ -193,18 +188,18 @@ updateTest =
             \_ ->
                 let
                     startModel =
-                        init 3 3 [ ( 0, 0 ), ( 0, 2 ), ( 2, 0 ), ( 2, 2 ) ]
+                        [ ( 0, 0 ), ( 0, 2 ), ( 2, 0 ), ( 2, 2 ) ]
 
                     newModel =
                         update startModel
                 in
-                    List.all (isDead newModel) startModel.livingCells
+                    List.all (isDead newModel) startModel
                         |> Expect.true "All cells should be dead"
         , test "three cells create a new one" <|
             \_ ->
                 let
                     startModel =
-                        init 3 3 [ ( 0, 0 ), ( 1, 0 ), ( 0, 1 ) ]
+                        [ ( 0, 0 ), ( 1, 0 ), ( 0, 1 ) ]
 
                     newModel =
                         update startModel
@@ -212,12 +207,12 @@ updateTest =
                     expected =
                         [ ( 0, 0 ), ( 0, 1 ), ( 1, 0 ), ( 1, 1 ) ]
                 in
-                    Expect.equal newModel.livingCells expected
+                    Expect.equal newModel expected
         , test "three neighbors remain unchanged" <|
             \_ ->
                 let
                     startModel =
-                        init 10 10 [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
+                        [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
 
                     newModel =
                         update startModel
@@ -225,12 +220,12 @@ updateTest =
                     expected =
                         [ ( 5, 5 ), ( 5, 6 ), ( 6, 5 ), ( 6, 6 ) ]
                 in
-                    Expect.equal newModel.livingCells expected
+                    Expect.equal newModel expected
         , test "overpopulation leads to death" <|
             \_ ->
                 let
                     startModel =
-                        init 10 10 [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
+                        [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
 
                     newModel =
                         update startModel
@@ -238,5 +233,5 @@ updateTest =
                     expected =
                         [ ( 4, 5 ), ( 4, 6 ), ( 4, 7 ), ( 5, 5 ), ( 5, 7 ), ( 6, 5 ), ( 6, 6 ), ( 6, 7 ) ]
                 in
-                    Expect.equal newModel.livingCells expected
+                    Expect.equal newModel expected
         ]

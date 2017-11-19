@@ -1,7 +1,6 @@
 module GameOfLife exposing (..)
 
 import Set
-import Debug
 
 
 type alias Cell =
@@ -9,34 +8,16 @@ type alias Cell =
 
 
 type alias Model =
-    { width : Int
-    , height : Int
-    , livingCells : List Cell
-    }
-
-
-init : Int -> Int -> List Cell -> Model
-init width height cells =
-    { width = width
-    , height = height
-    , livingCells = cells
-    }
+    List Cell
 
 
 update : Model -> Model
 update model =
-    let
-        cellToTest =
-            []
-
-        newCells =
-            List.concatMap getNeighbors model.livingCells
-                |> List.append model.livingCells
-                |> List.filter (\cell -> isAlive (updateCell model cell) cell)
-                |> Set.fromList
-                |> Set.toList
-    in
-        { model | livingCells = newCells }
+    List.concatMap getNeighbors model
+        |> List.append model
+        |> List.filter (\cell -> isAlive (updateCell model cell) cell)
+        |> Set.fromList
+        |> Set.toList
 
 
 updateCell : Model -> Cell -> Model
@@ -58,7 +39,7 @@ updateCell model cell =
             model
 
 
-getNeighbors : Cell -> List Cell
+getNeighbors : Cell -> Model
 getNeighbors cell =
     let
         x =
@@ -84,27 +65,26 @@ getNeighborCount model cell =
         neighbors =
             getNeighbors cell
     in
-        List.filter (\x -> List.member x model.livingCells) neighbors
+        List.filter (\x -> List.member x model) neighbors
             |> List.length
 
 
 spawn : Model -> Cell -> Model
 spawn model cell =
-    { model | livingCells = cell :: model.livingCells }
+    cell
+        :: model
+        |> Set.fromList
+        |> Set.toList
 
 
 kill : Model -> Cell -> Model
 kill model cell =
-    let
-        newCells =
-            List.filter (\x -> x /= cell) model.livingCells
-    in
-        { model | livingCells = newCells }
+    List.filter (\x -> x /= cell) model
 
 
 isAlive : Model -> Cell -> Bool
 isAlive model cell =
-    List.member cell model.livingCells
+    List.member cell model
 
 
 isDead : Model -> Cell -> Bool
