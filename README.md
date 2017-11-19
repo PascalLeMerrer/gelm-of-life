@@ -1,4 +1,4 @@
-A implementation in Elm of Conway's Game of Life.
+An implementation in Elm of Conway's Game of Life.
 
 A [demo](https://pascallemerrer.github.io/gelm-of-life/) is available.
 
