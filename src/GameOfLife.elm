@@ -5,6 +5,7 @@ import Html.Events exposing (onClick)
 import Set
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Time exposing (Time, every, second)
 
 
 type alias Cell =
@@ -17,6 +18,12 @@ type alias Model =
 
 type Msg
     = Next
+    | Tick Time
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    every second Tick
 
 
 initialModel =
@@ -116,10 +123,10 @@ view model =
             toString 100
     in
         div []
-            [ svg
+            [ button [ onClick Next ] [ Html.text "next step" ]
+            , svg
                 [ width "700", height "500", viewBox "0 0 700 500" ]
                 (List.map viewCell model)
-            , button [ onClick Next ] [ Html.text "next step" ]
             ]
 
 
@@ -141,5 +148,5 @@ main =
         { init = ( initialModel, Cmd.none )
         , view = view
         , update = update
-        , subscriptions = (\model -> Sub.none)
+        , subscriptions = subscriptions
         }
