@@ -187,7 +187,7 @@ viewCell cell =
         cellY =
             toString <| 10 * Tuple.second cell
     in
-        rect [ x cellX, y cellY, width "10", height "10", fill "#0B79CE" ] []
+        rect [ x cellX, y cellY, width "10", height "10", fill "#0B79CE", stroke "#eeeeee" ] []
 
 
 main : Program Never Model Msg
