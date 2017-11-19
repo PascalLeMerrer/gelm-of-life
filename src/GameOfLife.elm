@@ -1,5 +1,6 @@
 module GameOfLife exposing (..)
 
+import Dict
 import Html exposing (Html, program, div, button)
 import Html.Events exposing (onClick)
 import Set
@@ -21,13 +22,21 @@ type Msg
     | Tick Time
 
 
+patterns =
+    Dict.fromList
+        [ ( "small cross", [ ( 24, 26 ), ( 25, 25 ), ( 25, 26 ), ( 25, 27 ), ( 26, 26 ) ] )
+        , ( "small exploder", [ ( 24, 26 ), ( 24, 27 ), ( 25, 25 ), ( 25, 26 ), ( 25, 28 ), ( 26, 26 ), ( 26, 27 ) ] )
+        ]
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     every second Tick
 
 
+initialModel : Model
 initialModel =
-    [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
+    Maybe.withDefault [] <| Dict.get "small exploder" patterns
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
