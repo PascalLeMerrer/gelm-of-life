@@ -1,6 +1,10 @@
 module GameOfLife exposing (..)
 
+import Html exposing (Html, program, div, button)
+import Html.Events exposing (onClick)
 import Set
+import Svg exposing (..)
+import Svg.Attributes exposing (..)
 
 
 type alias Cell =
@@ -11,8 +15,21 @@ type alias Model =
     List Cell
 
 
-update : Model -> Model
-update model =
+type Msg
+    = Next
+
+
+initialModel =
+    [ ( 4, 6 ), ( 5, 5 ), ( 5, 6 ), ( 5, 7 ), ( 6, 6 ) ]
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( updateGame model, Cmd.none )
+
+
+updateGame : Model -> Model
+updateGame model =
     List.concatMap getNeighbors model
         |> List.append model
         |> List.filter (\cell -> isAlive (updateCell model cell) cell)
@@ -90,3 +107,39 @@ isAlive model cell =
 isDead : Model -> Cell -> Bool
 isDead model cell =
     not <| isAlive model cell
+
+
+view : Model -> Html Msg
+view model =
+    let
+        myX =
+            toString 100
+    in
+        div []
+            [ svg
+                [ width "700", height "500", viewBox "0 0 700 500" ]
+                (List.map viewCell model)
+            , button [ onClick Next ] [ Html.text "next step" ]
+            ]
+
+
+viewCell : Cell -> Svg Msg
+viewCell cell =
+    let
+        cellX =
+            toString <| 10 * Tuple.first cell
+
+        cellY =
+            toString <| 10 * Tuple.second cell
+    in
+        rect [ x cellX, y cellY, width "10", height "10", fill "#0B79CE" ] []
+
+
+main : Program Never Model Msg
+main =
+    program
+        { init = ( initialModel, Cmd.none )
+        , view = view
+        , update = update
+        , subscriptions = (\model -> Sub.none)
+        }

@@ -150,7 +150,7 @@ expectCellToBeDeadAfterUpdate startModel =
 
 updateTest : Test
 updateTest =
-    describe "update should apply game rules to all cells in the game"
+    describe "updateGame should apply game rules to all cells in the game"
         [ test "isolated cell dies" <|
             \_ ->
                 expectTranformTo [ ( 0, 0 ), ( 0, 2 ), ( 2, 0 ), ( 2, 2 ) ]
@@ -174,6 +174,6 @@ expectTranformTo : Model -> Model -> Expect.Expectation
 expectTranformTo startModel expectedModel =
     let
         newModel =
-            update startModel
+            updateGame startModel
     in
         Expect.equal newModel expectedModel
