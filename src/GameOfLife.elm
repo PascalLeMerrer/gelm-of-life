@@ -1,5 +1,6 @@
 module GameOfLife exposing (..)
 
+import Set
 import Debug
 
 
@@ -29,7 +30,11 @@ update model =
             []
 
         newCells =
-            List.filter (\cell -> isAlive (updateCell model cell) cell) model.livingCells
+            List.concatMap getNeighbors model.livingCells
+                |> List.append model.livingCells
+                |> List.filter (\cell -> isAlive (updateCell model cell) cell)
+                |> Set.fromList
+                |> Set.toList
     in
         { model | livingCells = newCells }
 
