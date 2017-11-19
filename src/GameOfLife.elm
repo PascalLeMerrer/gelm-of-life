@@ -1,10 +1,12 @@
 module GameOfLife exposing (..)
 
-import Dict
-import Html exposing (Html, program, div, button)
+import Dict exposing (..)
+import Html exposing (..)
+import Html.Attributes exposing (value)
 import Html.Events exposing (onClick)
+import Select
 import Set
-import Svg exposing (..)
+import Svg exposing (Svg, svg, rect)
 import Svg.Attributes exposing (..)
 import Time exposing (Time, every, second)
 
@@ -19,13 +21,23 @@ type alias Model =
 
 type Msg
     = Next
+    | SelectPattern String
     | Tick Time
 
 
+defaultPattern =
+    [ ( 24, 26 ), ( 25, 25 ), ( 25, 26 ), ( 25, 27 ), ( 26, 26 ) ]
+
+
+patterns : Dict String Model
 patterns =
     Dict.fromList
-        [ ( "small cross", [ ( 24, 26 ), ( 25, 25 ), ( 25, 26 ), ( 25, 27 ), ( 26, 26 ) ] )
+        [ ( "small cross", defaultPattern )
         , ( "small exploder", [ ( 24, 26 ), ( 24, 27 ), ( 25, 25 ), ( 25, 26 ), ( 25, 28 ), ( 26, 26 ), ( 26, 27 ) ] )
+        , ( "exploder"
+          , [ ( 23, 23 ), ( 23, 24 ), ( 23, 25 ), ( 23, 26 ), ( 23, 27 ), ( 25, 23 ), ( 25, 27 ), ( 27, 23 ), ( 27, 24 ), ( 27, 25 ), ( 27, 26 ), ( 27, 27 ) ]
+          )
+        , ( "ten cells line", [ ( 20, 25 ), ( 21, 25 ), ( 21, 25 ), ( 22, 25 ), ( 23, 25 ), ( 24, 25 ), ( 25, 25 ), ( 26, 25 ), ( 27, 25 ), ( 28, 25 ), ( 29, 25 ) ] )
         ]
 
 
@@ -36,12 +48,21 @@ subscriptions model =
 
 initialModel : Model
 initialModel =
-    Maybe.withDefault [] <| Dict.get "small exploder" patterns
+    Maybe.withDefault [] <| Dict.get "small cross" patterns
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( updateGame model, Cmd.none )
+    case msg of
+        SelectPattern pattern ->
+            let
+                selectedPattern =
+                    Maybe.withDefault defaultPattern <| Dict.get pattern patterns
+            in
+                ( selectedPattern, Cmd.none )
+
+        _ ->
+            ( updateGame model, Cmd.none )
 
 
 updateGame : Model -> Model
@@ -127,19 +148,27 @@ isDead model cell =
 
 view : Model -> Html Msg
 view model =
-    let
-        myX =
-            toString 100
-    in
-        div []
-            [ viewControls
-            , viewCells model
-            ]
+    div []
+        [ viewControls
+        , viewCells model
+        ]
 
 
 viewControls : Html Msg
 viewControls =
-    button [ onClick Next ] [ Html.text "next step" ]
+    let
+        patternNames =
+            Dict.keys patterns
+    in
+        div []
+            [ button [ onClick Next ] [ Html.text "Next step" ]
+            , Select.from patternNames SelectPattern
+            ]
+
+
+viewPatternOption : String -> Html Msg
+viewPatternOption pattern =
+    option [ value pattern ] [ text pattern ]
 
 
 viewCells : Model -> Html Msg
