@@ -132,11 +132,21 @@ view model =
             toString 100
     in
         div []
-            [ button [ onClick Next ] [ Html.text "next step" ]
-            , svg
-                [ width "700", height "500", viewBox "0 0 700 500" ]
-                (List.map viewCell model)
+            [ viewControls
+            , viewCells model
             ]
+
+
+viewControls : Html Msg
+viewControls =
+    button [ onClick Next ] [ Html.text "next step" ]
+
+
+viewCells : Model -> Html Msg
+viewCells model =
+    svg
+        [ width "700", height "500", viewBox "0 0 700 500" ]
+        (List.map viewCell model)
 
 
 viewCell : Cell -> Svg Msg
