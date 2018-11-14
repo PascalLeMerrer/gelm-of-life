@@ -1,14 +1,15 @@
-module GameOfLife exposing (..)
+module GameOfLife exposing (Cell, Model, Msg(..), defaultPattern, getNeighborCount, getNeighbors, initialModel, isAlive, isDead, kill, main, patterns, spawn, subscriptions, update, updateCell, updateGame, view, viewCell, viewCells, viewControls, viewPatternOption)
 
+import Browser
 import Dict exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (value)
-import Html.Events exposing (onClick)
-import Select
+import Html.Events exposing (on, onClick, targetValue)
+import Json.Decode as Decode
 import Set
-import Svg exposing (Svg, svg, rect)
+import Svg exposing (Svg, rect, svg)
 import Svg.Attributes exposing (..)
-import Time exposing (Time, every, second)
+import Time exposing (Posix, every)
 
 
 type alias Cell =
@@ -21,7 +22,7 @@ type alias Model =
 
 type Msg
     = SelectPattern String
-    | Tick Time
+    | Tick Time.Posix
 
 
 defaultPattern =
@@ -40,7 +41,7 @@ patterns =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    every second Tick
+    every 1000 Tick
 
 
 initialModel : Model
@@ -56,7 +57,7 @@ update msg model =
                 selectedPattern =
                     Maybe.withDefault defaultPattern <| Dict.get pattern patterns
             in
-                ( selectedPattern, Cmd.none )
+            ( selectedPattern, Cmd.none )
 
         _ ->
             ( updateGame model, Cmd.none )
@@ -80,14 +81,17 @@ updateCell model cell =
         cellIsAlive =
             isAlive model cell
     in
-        if cellIsAlive && (neighborCount < 2) then
-            kill model cell
-        else if cellIsAlive && (neighborCount > 3) then
-            kill model cell
-        else if not cellIsAlive && (neighborCount == 3) then
-            spawn model cell
-        else
-            model
+    if cellIsAlive && (neighborCount < 2) then
+        kill model cell
+
+    else if cellIsAlive && (neighborCount > 3) then
+        kill model cell
+
+    else if not cellIsAlive && (neighborCount == 3) then
+        spawn model cell
+
+    else
+        model
 
 
 getNeighbors : Cell -> Model
@@ -99,15 +103,15 @@ getNeighbors cell =
         y =
             Tuple.second cell
     in
-        [ ( x - 1, y - 1 )
-        , ( x, y - 1 )
-        , ( x + 1, y - 1 )
-        , ( x - 1, y )
-        , ( x + 1, y )
-        , ( x - 1, y + 1 )
-        , ( x, y + 1 )
-        , ( x + 1, y + 1 )
-        ]
+    [ ( x - 1, y - 1 )
+    , ( x, y - 1 )
+    , ( x + 1, y - 1 )
+    , ( x - 1, y )
+    , ( x + 1, y )
+    , ( x - 1, y + 1 )
+    , ( x, y + 1 )
+    , ( x + 1, y + 1 )
+    ]
 
 
 getNeighborCount : Model -> Cell -> Int
@@ -116,8 +120,8 @@ getNeighborCount model cell =
         neighbors =
             getNeighbors cell
     in
-        List.filter (\x -> List.member x model) neighbors
-            |> List.length
+    List.filter (\x -> List.member x model) neighbors
+        |> List.length
 
 
 spawn : Model -> Cell -> Model
@@ -143,12 +147,21 @@ isDead model cell =
     not <| isAlive model cell
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    div []
+    { title = "Gelm of Life"
+    , body = viewBody model
+    }
+
+
+viewBody : Model -> List (Html Msg)
+viewBody model =
+    [ div
+        []
         [ viewControls
         , viewCells model
         ]
+    ]
 
 
 viewControls : Html Msg
@@ -157,8 +170,10 @@ viewControls =
         patternNames =
             Dict.keys patterns
     in
-        div []
-            [ Select.from patternNames SelectPattern ]
+    div []
+        [ select [ on "change" (Decode.map SelectPattern targetValue) ] <|
+            List.map viewPatternOption patternNames
+        ]
 
 
 viewPatternOption : String -> Html Msg
@@ -177,18 +192,23 @@ viewCell : Cell -> Svg Msg
 viewCell cell =
     let
         cellX =
-            toString <| 10 * Tuple.first cell
+            String.fromInt <| 10 * Tuple.first cell
 
         cellY =
-            toString <| 10 * Tuple.second cell
+            String.fromInt <| 10 * Tuple.second cell
     in
-        rect [ x cellX, y cellY, width "10", height "10", fill "#0B79CE", stroke "#eeeeee" ] []
+    rect [ x cellX, y cellY, width "10", height "10", fill "#0B79CE", stroke "#eeeeee" ] []
 
 
-main : Program Never Model Msg
+init : flags -> ( Model, Cmd Msg )
+init _ =
+    ( initialModel, Cmd.none )
+
+
+main : Program Decode.Value Model Msg
 main =
-    program
-        { init = ( initialModel, Cmd.none )
+    Browser.document
+        { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
